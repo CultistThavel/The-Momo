@@ -6996,5 +6996,25 @@ window.extraUpdate=function(dt0){
 };
 window.v36={state:()=>({inCabinet:S.inT,panic:S.panic,ejecting:!!S.E,ban:S.ban}),eject:()=>{if(R()===2)S.inT=HIDE_EJECT}};
 }catch(e){console.error('[v36 init]',e)}
+})();// ===== v37: Момо не видит игрока на улице, пока сама внутри дома =====
+(function(){
+try{
+const d=Object.getOwnPropertyDescriptor(HS,'s');
+if(!d||!d.get){console.warn('[v37] HS.s не найден');return}
+const gI=d.get,sI=d.set;
+const re=/\bpinfo\b|\bplr\b/;
+Object.defineProperty(HS,'s',{
+ configurable:true,enumerable:true,
+ get(){
+  // ИИ Момо внутри дома (pinfo / plr) считает, что игрок "спрятан", пока он на улице
+  if(window.v12out){
+   const st=new Error().stack||'';
+   if(re.test(st))return 2;
+  }
+  return gI.call(HS);
+ },
+ set(v){if(sI)sI.call(HS,v)}
+});
+}catch(e){console.error('[v37 init]',e)}
 })();
 </script></body></html>
